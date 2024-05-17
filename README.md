@@ -1,3 +1,6 @@
+Original GLOBEM code forked for testing 
+
+
 ![GLOBEM Logo](./figures/GLOBEM_logo.png)
 
 > This is the official codebase of the dataset paper [GLOBEM Dataset: Multi-Year Datasets for Longitudinal Human Behavior Modeling Generalization](https://arxiv.org/abs/2211.02733), accepted by NeurIPS 2022 Dataset and Benchmark Track ([Link](https://arxiv.org/abs/2211.02733))
