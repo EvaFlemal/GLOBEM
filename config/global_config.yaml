@@ -6,7 +6,8 @@ all:
                                    # other examples: ["UCLA_10items_POST", "PSS_10items_POST"]
   
   # ds_keys: ["INS-W_1", "INS-W_2", "INS-W_3", "INS-W_4"] # list of datasets to analyze
-  ds_keys: ["INS-W-sample_1", "INS-W-sample_2", "INS-W-sample_3", "INS-W-sample_4"] # list of datasets to analyze
+  # ds_keys: ["INS-W-sample_1", "INS-W-sample_2", "INS-W-sample_3", "INS-W-sample_4"] # list of datasets to analyze
+  ds_keys: ["STDD_dataset_1"] # list of datasets to analyze
 
   # Default False. Only True when the dataset in ds_keys all support an extended list of feature types.
   # Currently only support INS-W
