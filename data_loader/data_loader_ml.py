@@ -160,11 +160,14 @@ def data_loader_single_dataset_label_based(institution:str, phase:int,
     datapoints = []
 
     if not flag_more_feat_types: # maximum compatibility of multiple datasets across insitutes
-        fts = ['f_loc', 'f_screen', 'f_slp', 'f_steps']
+        # fts = ['f_loc', 'f_screen', 'f_slp', 'f_steps']
+        fts = ['ACTIVITY', 'STEP', 'SIGNIFICANT_MOTION', 'GRAVITY', "LIGHT", "APPUSAGE", "CALL", "EMA", "KEYSTROKE", "NOTIFICATIONS", "SCREEN_STATE", "SOUND", "TYPING", "UNLOCK_STATE"]
     else:
-        fts = ['f_loc', 'f_screen', 'f_slp', 'f_steps', "f_blue", "f_call"]
+        # fts = ['f_loc', 'f_screen', 'f_slp', 'f_steps', "f_blue", "f_call"]
+        fts = ['ACTIVITY', 'STEP', 'SIGNIFICANT_MOTION', 'GRAVITY', "LIGHT", "APPUSAGE", "CALL", "EMA", "KEYSTROKE", "NOTIFICATIONS", "SCREEN_STATE", "SOUND", "TYPING", "UNLOCK_STATE"]
     retained_features = ["pid", "date"]
     for col in df_full_rawdata.columns:
+        print(f"COLONNES: {col}")
         for ft in fts:
             if (col.startswith(ft)):
                 retained_features.append(col)
@@ -260,6 +263,7 @@ def data_loader_single(prediction_target:str, institution:str, phase:int, flag_m
     if (os.path.exists(dataset_file_path)):
         with open(dataset_file_path, "rb") as f:
             dataset = pickle.load(f)
+            print(f"DATASET: {dataset}")
     else:
         datapoints = data_loader_single_dataset_label_based(institution, phase, prediction_target, flag_more_feat_types)
         dataset = DatasetDict(key = ds_key, prediction_target=prediction_target, datapoints=datapoints)

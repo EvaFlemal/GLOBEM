@@ -26,7 +26,7 @@ feature_folder = {
         4:get_raw_feature_folderpath(4, "INS-W-sample")},
     "INS-D": {1:get_raw_feature_folderpath(1, "INS-D"),
         2: get_raw_feature_folderpath(2, "INS-D")},
-    "STDD": {1:get_raw_feature_folderpath(1,"STDD_dataset")},
+    "STDD": {1:get_raw_feature_folderpath(1,"STDD-dataset")},
 }
 
 survey_folder = {
@@ -40,7 +40,7 @@ survey_folder = {
         4:get_survey_filepath(4, "INS-W-sample"),},
     "INS-D": {1:get_survey_filepath(1, "INS-D"), 
         2: get_survey_filepath(2, "INS-D")},
-    "STDD": {1:get_survey_filepath(1,"STDD_dataset")},
+    "STDD": {1:get_survey_filepath(1,"STDD-dataset")},
 }
 
 participants_info_folder = {
@@ -54,7 +54,7 @@ participants_info_folder = {
         4:get_participantsinfo_filepath(4, "INS-W-sample")},
     "INS-D": {1:get_participantsinfo_filepath(1, "INS-D"),
         2:get_participantsinfo_filepath(2, "INS-D")},
-    "STDD_dataset": {1:get_participantsinfo_filepath(1,"STDD_dataset")},
+    "STDD": {1:get_participantsinfo_filepath(1,"STDD-dataset")},
 }
 
 url_dictionary = {

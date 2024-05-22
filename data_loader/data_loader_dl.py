@@ -473,18 +473,22 @@ class dl_feat_preparation():
 
         all_feats = []
         if (flag_more_feat_types):
-            feature_type_list = ['f_loc', 'f_screen', 'f_slp', 'f_steps', "f_blue", "f_call"]
+            #feature_type_list = ['f_loc', 'f_screen', 'f_slp', 'f_steps', "f_blue", "f_call"]
+            feature_type_list = ['ACTIVITY', 'STEP', 'SIGNIFICANT_MOTION', 'GRAVITY', "LIGHT", "APPUSAGE", "CALL", "EMA", "KEYSTROKE", "NOTIFICATIONS", "SCREEN_STATE", "SOUND", "TYPING", "UNLOCK_STATE"]
         else:
-            feature_type_list = ['f_loc', 'f_screen', 'f_slp', 'f_steps']
-        for epoch in epochs_5:
+            #feature_type_list = ['f_loc', 'f_screen', 'f_slp', 'f_steps']
+            feature_type_list = ['ACTIVITY', 'STEP', 'SIGNIFICANT_MOTION', 'GRAVITY', "LIGHT", "APPUSAGE", "CALL", "EMA", "KEYSTROKE", "NOTIFICATIONS", "SCREEN_STATE", "SOUND", "TYPING", "UNLOCK_STATE"]
+        # for epoch in epochs_5:
+        for epoch in epoch_1:
             all_feats += [f for ft in feature_type_list for f in fc_repo.feature_columns_selected_epoches_types[epoch][ft]]
 
         self.feature_list_nonorm = deepcopy(all_feats)
         self.feature_list_norm = []
         for f in all_feats:
-            ft, fn, seg = f.split(":")
-            new_f = f"{ft}:{fn}_norm:{seg}"
-            self.feature_list_norm.append(new_f)
+            # ft, fn, seg = f.split(":")
+            ft, fn, seg = f.split("#")
+            # new_f = f"{ft}:{fn}_norm:{seg}"
+            # self.feature_list_norm.append(new_f)
         self.feature_list = self.feature_list_nonorm + self.feature_list_norm
 
         if (flag_more_feat_types):
@@ -542,6 +546,7 @@ class dl_feat_preparation():
         
         df_datapoints = deepcopy(dataset.datapoints)
 
+        # print(df_datapoints["X_raw"].columns)
         df_datapoints_X = df_datapoints["X_raw"].apply(lambda df : df[self.feature_list].iloc[-28:])
 
         @globalize
