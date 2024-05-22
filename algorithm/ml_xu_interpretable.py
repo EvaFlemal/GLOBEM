@@ -49,7 +49,8 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
 
         self.feature_list = [
             f"{f}:{epoch}" for f in self.feature_list_base \
-                for epoch in epochs_4
+                # for epoch in epochs_4
+                for epoch in epoch_1
         ]
 
         self.feature_list_norm = [
