@@ -9,5 +9,7 @@
 !INS-W-sample_3/**
 !INS-W-sample_4
 !INS-W-sample_4/**
+!STDD-dataset_1
+!STDD-dataset_1/**
 .DS_Store
 **/.DS_Store
