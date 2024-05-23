@@ -211,8 +211,8 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
     def arm_behavior_rules(self, df_grp:pd.DataFrame, slice_key:str, min_supp:float=0.5, min_conf:float=0.7):
         def prep_arm(df, top_features):
             # filter very empty rows (i.e., days)
-            print(f"COLONNES: {df.columns}")
-            print(f"FEATURES: {top_features}")
+            # print(f"COLONNES: {df.columns}")
+            # print(f"FEATURES: {top_features}")
             df_tmp_ = df[["pid", "date"] + top_features]
             df_tmp = df_tmp_[df_tmp_.isna().sum(axis = 1) <= df_tmp_.shape[1]/2].copy()
             # obtain data points per row (i.e., per day per person)
@@ -242,7 +242,9 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
 
         fpGrowth = FPGrowth(itemsCol="items", minSupport=min_supp, minConfidence=min_conf)
         model_arm = fpGrowth.fit(df_arm_spark)
+        print("association rules")
         df_arm_output = model_arm.associationRules.toPandas()
+        print("association rules finished")
         df_arm_output["X"] = df_arm_output["antecedent"].apply(lambda x : ";".join(map(str,np.sort(x))))
         df_arm_output["Y"] = df_arm_output["consequent"].apply(lambda x : ";".join(map(str,np.sort(x))))
         df_arm_output["idx"] = np.arange(1, df_arm_output.shape[0]+1)
@@ -253,9 +255,11 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         df_grp1 = df_twogrps[df_twogrps["y_raw"]]
         df_grp2 = df_twogrps[~df_twogrps["y_raw"]]
 
+        print("starting ARM on group 1")
         df_arm_grp1 = self.arm_behavior_rules(df_grp1, slice_key,
             min_supp=self.thresholds_arm[slice_key]["supp"],
             min_conf=self.thresholds_arm[slice_key]["conf"])
+        print("starting ARM on group 2")
         df_arm_grp2 = self.arm_behavior_rules(df_grp2, slice_key,
             min_supp=self.thresholds_arm[slice_key]["supp"],
             min_conf=self.thresholds_arm[slice_key]["conf"])
@@ -480,15 +484,19 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
                 self.assign_feat_int_dict(self.top_feature_dict, self.top_feature_dict_dis)
             else:
                 ### Step 1: Feature Selection ###
+                print('-------------------starting feature selection-------------------')
                 self.feature_selection(df_features=df_epoch_features, df_labels=df_datapoints_arm["y_raw"])
 
                 ### Step 2: Assocaition Rule Mining ###
+                print('-------------------starting ARM-------------------')
                 df_rule_twogrps = self.arm_grp_contrast(df_datapoints_wkdy=df_datapoints_arm_wkdy, df_datapoints_wkend=df_datapoints_arm_wkend)
 
                 ### Step 3: Rule Selection ###
+                print('-------------------starting rules selection-------------------')
                 rulesets_final = self.behavior_rules_selection(df_rule_twogrps)
 
                 ### Step 4: Feature Extraction ###
+                print('-------------------starting feature extraction-------------------')
                 results_pool = self.feature_extraction(df_datapoints_traintest_wkdy, df_datapoints_traintest_wkend, rulesets_final, flag_train)
 
                 if (self.config["training_params"]["save_and_reload"]):
