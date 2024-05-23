@@ -6,7 +6,7 @@ feature_definition:
   include_device_type: False # whether to include device type in the feature matrix
   # Feature used in the paper (a subset that is compatible within the dataset)
 
-  feature_list: [
+  feature_list_base: [
     "ACTIVITY#RUNNING_count#4HR",
     "ACTIVITY#RUNNING_duration#4HR",
     "ACTIVITY#RUNNING_proportion#4HR",

@@ -54,8 +54,8 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         ]
 
         self.feature_list_norm = [
-                f"{f}_norm:{epoch}" for f in self.feature_list_base \
-                    for epoch in epochs_4
+                # f"{f}_norm:{epoch}" for f in self.feature_list_base \
+                #     for epoch in epochs_4
             ]
 
         self.NAFILL = - 10<<10
