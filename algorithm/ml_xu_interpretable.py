@@ -157,7 +157,8 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         count_large_featurenum_with_small_datasize = 0
         for slice_key, featcomps in top_feature_dict_comp.items():
             for featcomp in featcomps:
-                idx_split = featcomp.rfind(":")
+                # idx_split = featcomp.rfind(":")
+                idx_split = featcomp.rfind("#")
                 feat = featcomp[:idx_split] + featcomp[idx_split:].split("_")[0]
                 feat_dis = featcomp[:idx_split] + "_dis" + featcomp[idx_split:].split("_")[0]
                 top_feature_dict[slice_key].append(feat)
