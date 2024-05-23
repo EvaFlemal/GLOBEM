@@ -167,7 +167,7 @@ def data_loader_single_dataset_label_based(institution:str, phase:int,
         fts = ['ACTIVITY', 'STEP', 'SIGNIFICANT_MOTION', 'GRAVITY', "LIGHT", "APPUSAGE", "CALL", "EMA", "KEYSTROKE", "NOTIFICATIONS", "SCREEN_STATE", "SOUND", "TYPING", "UNLOCK_STATE"]
     retained_features = ["pid", "date"]
     for col in df_full_rawdata.columns:
-        print(f"COLONNES: {col}")
+        # print(f"COLONNES: {col}")
         for ft in fts:
             if (col.startswith(ft)):
                 retained_features.append(col)
