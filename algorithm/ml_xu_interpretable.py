@@ -211,6 +211,8 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
     def arm_behavior_rules(self, df_grp:pd.DataFrame, slice_key:str, min_supp:float=0.5, min_conf:float=0.7):
         def prep_arm(df, top_features):
             # filter very empty rows (i.e., days)
+            print(f"COLONNES: {df.columns}")
+            print(f"FEATURES: {top_features}")
             df_tmp_ = df[["pid", "date"] + top_features]
             df_tmp = df_tmp_[df_tmp_.isna().sum(axis = 1) <= df_tmp_.shape[1]/2].copy()
             # obtain data points per row (i.e., per day per person)
