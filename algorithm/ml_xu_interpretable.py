@@ -48,7 +48,8 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         super().__init__(config_dict, config_name)
 
         self.feature_list = [
-            f"{f}:{epoch}" for f in self.feature_list_base \
+            f"{f}" for f in self.feature_list_base \
+            # f"{f}:{epoch}" for f in self.feature_list_base \
                 # for epoch in epochs_4
                 for epoch in epoch_1
         ]
@@ -86,7 +87,8 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         if self.verbose > 0:
             print("set arm theshold: ", key)
         thresholds_arm = {
-            "wkdy_morning": {"supp": self.model_params[key]["weekday"]["morning"]["supp"],
+            # "wkdy_morning": {"supp": self.model_params[key]["weekday"]["morning"]["supp"],
+            "wkdy_4HR": {"supp": self.model_params[key]["weekday"]["morning"]["supp"],
                             "conf": self.model_params[key]["weekday"]["morning"]["conf"]},
             "wkdy_afternoon": {"supp": self.model_params[key]["weekday"]["afternoon"]["supp"],
                             "conf": self.model_params[key]["weekday"]["afternoon"]["conf"]},
@@ -94,7 +96,8 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
                             "conf": self.model_params[key]["weekday"]["evening"]["conf"]},
             "wkdy_night": {"supp": self.model_params[key]["weekday"]["night"]["supp"],
                             "conf": self.model_params[key]["weekday"]["night"]["conf"]},
-            "wkend_morning": {"supp": self.model_params[key]["weekend"]["morning"]["supp"],
+            # "wkend_morning": {"supp": self.model_params[key]["weekend"]["morning"]["supp"],
+            "wkend_4HR": {"supp": self.model_params[key]["weekend"]["morning"]["supp"],
                             "conf": self.model_params[key]["weekend"]["morning"]["conf"]},
             "wkend_afternoon": {"supp": self.model_params[key]["weekend"]["afternoon"]["supp"],
                             "conf": self.model_params[key]["weekend"]["afternoon"]["conf"]},
@@ -450,7 +453,8 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
 
         self.feature_dict = {}
         for feat in df_epoch_features.columns:
-            slice_str = feat.split(":")[-1]
+            # slice_str = feat.split(":")[-1]
+            slice_str = feat.split("#")[-1]
             epoch, wk, comp = slice_str.split("_")
             slice_key = f"{wk}_{epoch}"
             if (slice_key) in self.feature_dict:
