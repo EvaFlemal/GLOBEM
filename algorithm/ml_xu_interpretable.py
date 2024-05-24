@@ -490,6 +490,7 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
                 ### Step 2: Assocaition Rule Mining ###
                 print('-------------------starting ARM-------------------')
                 df_rule_twogrps = self.arm_grp_contrast(df_datapoints_wkdy=df_datapoints_arm_wkdy, df_datapoints_wkend=df_datapoints_arm_wkend)
+                print(df_rule_twogrps.head(10))
 
                 ### Step 3: Rule Selection ###
                 print('-------------------starting rules selection-------------------')
