@@ -171,10 +171,13 @@ feature_definition:
     "ACTIVITY#STILL_count#4HR",
     "ACTIVITY#STILL_duration#4HR",
     "ACTIVITY#STILL_proportion#4HR",
+
     "STEP#count#4HR",
     "STEP#count2std#4HR",
+    
     "SIGNIFICANT_MOTION#count#4HR",
     "SIGNIFICANT_MOTION#elapsed_time#4HR",
+    
     "GRAVITY#X_mean#4HR",
     "GRAVITY#X_min#4HR",
     "GRAVITY#X_max#4HR",
@@ -193,6 +196,7 @@ feature_definition:
     "GRAVITY#Z_std#4HR",
     "GRAVITY#Z_kurtosis#4HR",
     "GRAVITY#Z_skewness#4HR",
+    
     "LIGHT#count_0#4HR",
     "LIGHT#BRIGHTNESS_LOG_mean#4HR",
     "LIGHT#BRIGHTNESS_LOG_min#4HR",
@@ -200,6 +204,7 @@ feature_definition:
     "LIGHT#BRIGHTNESS_LOG_std#4HR",
     "LIGHT#BRIGHTNESS_LOG_kurtosis#4HR",
     "LIGHT#BRIGHTNESS_LOG_skewness#4HR",
+    
     "APPUSAGE#entropy#4HR",
     "APPUSAGE#normalized_entropy#4HR",
     "APPUSAGE#COMMUNICATION#count#4HR",
@@ -222,6 +227,7 @@ feature_definition:
     "APPUSAGE#PHOTOGRAPHY#duration#4HR",
     "APPUSAGE#PRODUCTIVITY#count#4HR",
     "APPUSAGE#PRODUCTIVITY#duration#4HR",
+    
     "CALL#count_ratio_in2missed#4HR",
     "CALL#count_ratio_in2out#4HR",
     "CALL#duration_ratio_in2out#4HR",
@@ -230,8 +236,10 @@ feature_definition:
     "CALL#MISSED_count#4HR",
     "CALL#IN_count#4HR",
     "CALL#OUT_count#4HR",
+    
     #"EMA#sleep_trouble#4HR",
     #"EMA#poor_appetite#4HR",
+    
     "KEYSTROKE#SOCIAL#backspace_ratio#4HR",
     "KEYSTROKE#SOCIAL#autocorrect_ratio#4HR",
     "KEYSTROKE#SOCIAL#autocorrect_accept_ratio#4HR",
@@ -242,6 +250,7 @@ feature_definition:
     "KEYSTROKE#NON-SOCIAL#autocorrect_accept_ratio#4HR",
     "KEYSTROKE#NON-SOCIAL#count_sessions#4HR",
     "KEYSTROKE#NON-SOCIAL#interkeyDelay#mean",
+    
     "NOTIFICATIONS#SOCIAL#ARRIVED_count#4HR",
     "NOTIFICATIONS#SOCIAL#CLICKED_count#4HR",
     "NOTIFICATIONS#SOCIAL#DECISION_TIME_count#4HR",
@@ -254,6 +263,7 @@ feature_definition:
     "NOTIFICATIONS#NON-SOCIAL#DECISION_TIME_duration_in_sec",
     "NOTIFICATIONS#NON-SOCIAL#count_ratio_clicked2arrived#4HR",
     "NOTIFICATIONS#NON-SOCIAL#count_ratio_decided2arrived#4HR",
+    
     "SCREEN_STATE#on_count#4HR",
     "SCREEN_STATE#off_count#4HR",
     "SCREEN_STATE#entropy#4HR",
@@ -261,12 +271,14 @@ feature_definition:
     "SCREEN_STATE#total_duration#4HR",
     "SCREEN_STATE#mean_duration#4HR",
     "SCREEN_STATE#check_count#4HR",
+    
     "SOUND#ENERGY_mean#4HR",
     "SOUND#ENERGY_min#4HR",
     "SOUND#ENERGY_max#4HR",
     "SOUND#ENERGY_std#4HR",
     "SOUND#ENERGY_kurtosis#4HR",
     "SOUND#ENERGY_skewness#4HR",
+    
     "TYPING#SOCIAL#count#4HR",
     "TYPING#SOCIAL#total#4HR",
     "TYPING#SOCIAL#mean#4HR",
@@ -283,6 +295,7 @@ feature_definition:
     "TYPING#NON-SOCIAL#max#4HR",
     "TYPING#NON-SOCIAL#kurtosis#4HR",
     "TYPING#NON-SOCIAL#skewness#4HR",
+    
     "UNLOCK_STATE#unlock_count#4HR",
     "UNLOCK_STATE#lock_count#4HR",
     "UNLOCK_STATE#entropy#4HR",
@@ -497,7 +510,7 @@ model_params:
 
 
 training_params:
-  verbose: 2
+  verbose: 1
   # whether to save and re-use features repetitively
   #     True only when re-running the exact same model training
   save_and_reload: False
