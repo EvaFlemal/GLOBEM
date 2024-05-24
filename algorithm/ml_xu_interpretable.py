@@ -143,22 +143,21 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
                 else:
                     break
             return slice_key, top_features
-        print(df_features)
         df_features_id = ray.put(df_features)
-        print(f'df features: {df_features_id}')
         df_labels_id = ray.put(df_labels)
-        print(f'df labels: {df_labels_id}')
         pool_results = ray.get([feature_select_mutual_info.remote(
             df_features_id, df_labels_id, feats, slice_key) for slice_key, feats in self.feature_dict.items()]
             )
-        # print(f'poll results: {pool_results}')
+        if self.verbose>1:
+            print(f'poll results: {pool_results}')
 
         top_feature_dict_comp = {r[0]:r[1] for r in pool_results}
 
         top_feature_dict = {slice_key:[] for slice_key in top_feature_dict_comp}
-        # print(f'features dict: {top_feature_dict}')
         top_feature_dict_dis = {slice_key:[] for slice_key in top_feature_dict_comp}
-        # print(f'dis features dict: {top_feature_dict_dis}')
+        if self.verbose>1:
+            print(f'features dict: {top_feature_dict}')
+            print(f'dis features dict: {top_feature_dict_dis}')
         count_large_featurenum_with_small_datasize = 0
         for slice_key, featcomps in top_feature_dict_comp.items():
             for featcomp in featcomps:
@@ -176,9 +175,10 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
             self.set_arm_threshold(flag_th_memory_safe="safest")
         
         self.top_feature_dict = deepcopy(top_feature_dict)
-        # print(f'features dict 2: {top_feature_dict}')
         self.top_feature_dict_dis = deepcopy(top_feature_dict_dis)
-        print(f'dis features dict 2: {top_feature_dict_dis}')
+        if (self.verbose>1):
+            print(f'features dict 2: {top_feature_dict}')
+            print(f'dis features dict 2: {top_feature_dict_dis}')
         self.assign_feat_int_dict(self.top_feature_dict, self.top_feature_dict_dis)
 
         if (self.verbose > 0):
@@ -212,22 +212,25 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         self.int_to_feat_dict = deepcopy(int_to_feat_dict)
         self.featdis_to_int_dict = deepcopy(featdis_to_int_dict)
         self.int_to_featdis_dict = deepcopy(int_to_featdis_dict)
-        # print(f'feat to int {feat_to_int_dict} \n int to feat: {int_to_feat_dict} \n dis feat to int: {featdis_to_int_dict} \n int to dis feat: {int_to_featdis_dict}')
+        # if (self.verbose>1):
+            # print(f'feat to int {feat_to_int_dict} \n int to feat: {int_to_feat_dict} \n dis feat to int: {featdis_to_int_dict} \n int to dis feat: {int_to_featdis_dict}')
 
 
     ### Step 2: Assocaition Rule Mining ###
     def arm_behavior_rules(self, df_grp:pd.DataFrame, slice_key:str, min_supp:float=0.5, min_conf:float=0.7):
         def prep_arm(df, top_features):
-            # print(f"COLONNES: {df.columns}")
-            # print(f"FEATURES: {top_features}")
+            if (self.verbose>1):
+                
+                print(f"COLONNES: {df.columns}")
+                print(f"FEATURES: {top_features}")
     
             # filter very empty rows (i.e., days)
             df_tmp_ = df[["pid", "date"] + top_features]
             df_tmp = df_tmp_[df_tmp_.isna().sum(axis = 1) <= df_tmp_.shape[1]/2].copy()
             # obtain data points per row (i.e., per day per person)
             if (df_tmp.empty):
-                # if (self.verbose > 1):
-                #     print("empty")
+                if (self.verbose > 1):
+                    print("empty")
                 df_tmp["dis_value"] = pd.NA
             else:
                 df_tmp["dis_value"] = df_tmp.apply(
@@ -238,8 +241,8 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
             return df_tmp[["pid", "date", "dis_value"]]    
 
         # prep int list for arm
-        print(df_grp)
-        print(f'X ram: {df_grp["X_raw"]}')
+        if (self.verbose>1):
+            print(f'X raw: {df_grp["X_raw"]}')
         data_arm_int = df_grp["X_raw"].apply(lambda x : prep_arm(x, self.top_feature_dict_dis[slice_key]))
         # drop duplicate person day
         data_arm = list(pd.concat(data_arm_int.values, axis = 0).drop_duplicates(["pid", "date"])["dis_value"].values)
@@ -255,9 +258,11 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
 
         fpGrowth = FPGrowth(itemsCol="items", minSupport=min_supp, minConfidence=min_conf)
         model_arm = fpGrowth.fit(df_arm_spark)
-        print("association rules")
+        if (self.verbose>0):
+            print("association rules")
         df_arm_output = model_arm.associationRules.toPandas()
-        print("association rules finished")
+        if (self.verbose>0):
+           print("association rules finished")
         df_arm_output["X"] = df_arm_output["antecedent"].apply(lambda x : ";".join(map(str,np.sort(x))))
         df_arm_output["Y"] = df_arm_output["consequent"].apply(lambda x : ";".join(map(str,np.sort(x))))
         df_arm_output["idx"] = np.arange(1, df_arm_output.shape[0]+1)
@@ -265,15 +270,18 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         return df_arm_output[["X","Y","idx","support","confidence","lift"]]
         
     def arm_grp_contrast_slice(self, df_twogrps: pd.DataFrame, slice_key: str):
-        print(df_twogrps["y_raw"])
+        if (self.verbose>1):
+            print(df_twogrps["y_raw"])
         df_grp1 = df_twogrps[df_twogrps["y_raw"]]
         df_grp2 = df_twogrps[~df_twogrps["y_raw"]]
 
-        print("starting ARM on group 1")
+        if (self.verbose>0):
+            print("starting ARM on group 1")
         df_arm_grp1 = self.arm_behavior_rules(df_grp1, slice_key,
             min_supp=self.thresholds_arm[slice_key]["supp"],
             min_conf=self.thresholds_arm[slice_key]["conf"])
-        print("starting ARM on group 2")
+        if (self.verbose>0):
+            print("starting ARM on group 2")
         df_arm_grp2 = self.arm_behavior_rules(df_grp2, slice_key,
             min_supp=self.thresholds_arm[slice_key]["supp"],
             min_conf=self.thresholds_arm[slice_key]["conf"])
@@ -439,7 +447,9 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
     def prep_data_repo(self, dataset:DatasetDict, flag_train:bool = True) -> DataRepo:
         set_random_seed(42)
         df_datapoints = deepcopy(dataset.datapoints)
-        print(f'df datapoints: {df_datapoints}')
+        
+        if (self.verbose>1):
+            print(f'df datapoints: {df_datapoints}')
 
         pids_all = df_datapoints["pid"].unique()
         pids_arm = np.random.choice(pids_all, int(0.35 * len(pids_all)), replace = False)
@@ -506,19 +516,23 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
                 ### Step 2: Assocaition Rule Mining ###
                 print('-------------------starting ARM-------------------')
                 df_rule_twogrps = self.arm_grp_contrast(df_datapoints_wkdy=df_datapoints_arm_wkdy, df_datapoints_wkend=df_datapoints_arm_wkend)
-                print(df_rule_twogrps)
+                if (self.verbose>1):
+                    print(df_rule_twogrps)
 
                 ### Step 3: Rule Selection ###
                 print('-------------------starting rules selection-------------------')
                 rulesets_final = self.behavior_rules_selection(df_rule_twogrps)
-                print(f'ruleset: {rulesets_final}')
+                if (self.verbose>1):
+                    print(f'ruleset: {rulesets_final}')
 
                 ### Step 4: Feature Extraction ###
                 print('-------------------starting feature extraction-------------------')
-                print(f'traintest weekday: {df_datapoints_traintest_wkdy}')
-                print(f'traintest weekend: {df_datapoints_traintest_wkend}')
+                if (self.verbose>1):
+                    print(f'traintest weekday: {df_datapoints_traintest_wkdy}')
+                    print(f'traintest weekend: {df_datapoints_traintest_wkend}')
                 results_pool = self.feature_extraction(df_datapoints_traintest_wkdy, df_datapoints_traintest_wkend, rulesets_final, flag_train)
-                print(f'results: {results_pool}')
+                if (self.verbose>1):
+                    print(f'results: {results_pool}')
 
                 if (self.config["training_params"]["save_and_reload"]):
                     data_repo = {
