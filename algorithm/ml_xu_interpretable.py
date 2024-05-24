@@ -494,6 +494,7 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
                 ### Step 3: Rule Selection ###
                 print('-------------------starting rules selection-------------------')
                 rulesets_final = self.behavior_rules_selection(df_rule_twogrps)
+                print(f'ruleset: {rulesets_final}')
 
                 ### Step 4: Feature Extraction ###
                 print('-------------------starting feature extraction-------------------')
