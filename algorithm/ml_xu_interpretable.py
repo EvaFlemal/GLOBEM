@@ -497,7 +497,10 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
 
                 ### Step 4: Feature Extraction ###
                 print('-------------------starting feature extraction-------------------')
+                print(f'traintest weekday: {df_datapoints_traintest_wkdy}')
+                print(f'traintest weekend: {df_datapoints_traintest_wkend}')
                 results_pool = self.feature_extraction(df_datapoints_traintest_wkdy, df_datapoints_traintest_wkend, rulesets_final, flag_train)
+                print(f'results: {results_pool}')
 
                 if (self.config["training_params"]["save_and_reload"]):
                     data_repo = {
