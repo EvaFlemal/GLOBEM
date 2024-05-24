@@ -290,7 +290,7 @@ feature_definition:
     "UNLOCK_STATE#total_duration#4HR",
     "UNLOCK_STATE#mean_duration#4HR",
   ]
-  
+
   # feature_list_base: [
   #           "f_screen:phone_screen_rapids_avgdurationunlock",
   #           "f_screen:phone_screen_rapids_stddurationunlock",
@@ -497,7 +497,7 @@ model_params:
 
 
 training_params:
-  verbose: 0
+  verbose: 2
   # whether to save and re-use features repetitively
   #     True only when re-running the exact same model training
   save_and_reload: False

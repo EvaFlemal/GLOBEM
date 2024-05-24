@@ -145,15 +145,20 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
             return slice_key, top_features
         
         df_features_id = ray.put(df_features)
+        print(f'df features: {df_features_id}')
         df_labels_id = ray.put(df_labels)
+        print(f'df labels: {df_labels_id}')
         pool_results = ray.get([feature_select_mutual_info.remote(
             df_features_id, df_labels_id, feats, slice_key) for slice_key, feats in self.feature_dict.items()]
             )
+        print(f'poll results: {pool_results}')
 
         top_feature_dict_comp = {r[0]:r[1] for r in pool_results}
 
         top_feature_dict = {slice_key:[] for slice_key in top_feature_dict_comp}
+        print(f'features dict: {top_feature_dict}')
         top_feature_dict_dis = {slice_key:[] for slice_key in top_feature_dict_comp}
+        print(f'dis features dict: {top_feature_dict_dis}')
         count_large_featurenum_with_small_datasize = 0
         for slice_key, featcomps in top_feature_dict_comp.items():
             for featcomp in featcomps:
@@ -171,7 +176,9 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
             self.set_arm_threshold(flag_th_memory_safe="safest")
         
         self.top_feature_dict = deepcopy(top_feature_dict)
+        print(f'features dict 2: {top_feature_dict}')
         self.top_feature_dict_dis = deepcopy(top_feature_dict_dis)
+        print(f'dis features dict 2: {top_feature_dict}')
         self.assign_feat_int_dict(self.top_feature_dict, self.top_feature_dict_dis)
 
         if (self.verbose > 0):
@@ -205,6 +212,7 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         self.int_to_feat_dict = deepcopy(int_to_feat_dict)
         self.featdis_to_int_dict = deepcopy(featdis_to_int_dict)
         self.int_to_featdis_dict = deepcopy(int_to_featdis_dict)
+        print(f'feat to int {feat_to_int_dict} \n int to feat: {int_to_feat_dict} \n dis feat to int: {featdis_to_int_dict} \n int to dis feat: {int_to_featdis_dict}')
 
 
     ### Step 2: Assocaition Rule Mining ###
@@ -486,6 +494,7 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
                 ### Step 1: Feature Selection ###
                 print('-------------------starting feature selection-------------------')
                 self.feature_selection(df_features=df_epoch_features, df_labels=df_datapoints_arm["y_raw"])
+
 
                 ### Step 2: Assocaition Rule Mining ###
                 print('-------------------starting ARM-------------------')
