@@ -232,6 +232,8 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
                 df_tmp["dis_value"] = df_tmp.apply(
                     lambda row : [self.featdis_to_int_dict[i][row[i]] for i in top_features if not pd.isna(row[i])],
                     axis = 1).values
+                if (self.verbose > 0):
+                    print("not empty")                
             return df_tmp[["pid", "date", "dis_value"]]    
 
         # prep int list for arm
