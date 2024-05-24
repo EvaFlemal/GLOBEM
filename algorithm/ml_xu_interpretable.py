@@ -433,6 +433,7 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
     def prep_data_repo(self, dataset:DatasetDict, flag_train:bool = True) -> DataRepo:
         set_random_seed(42)
         df_datapoints = deepcopy(dataset.datapoints)
+        print(f'df datapoints: {df_datapoints}')
 
         pids_all = df_datapoints["pid"].unique()
         pids_arm = np.random.choice(pids_all, int(0.35 * len(pids_all)), replace = False)
