@@ -225,15 +225,15 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
             df_tmp = df_tmp_[df_tmp_.isna().sum(axis = 1) <= df_tmp_.shape[1]/2].copy()
             # obtain data points per row (i.e., per day per person)
             if (df_tmp.empty):
-                if (self.verbose > 0):
-                    print("empty")
+                # if (self.verbose > 1):
+                #     print("empty")
                 df_tmp["dis_value"] = pd.NA
             else:
                 df_tmp["dis_value"] = df_tmp.apply(
                     lambda row : [self.featdis_to_int_dict[i][row[i]] for i in top_features if not pd.isna(row[i])],
                     axis = 1).values
-                if (self.verbose > 0):
-                    print("not empty")                
+                # if (self.verbose > 0):
+                    # print("not empty")
             return df_tmp[["pid", "date", "dis_value"]]    
 
         # prep int list for arm
