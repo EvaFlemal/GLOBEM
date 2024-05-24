@@ -151,14 +151,14 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         pool_results = ray.get([feature_select_mutual_info.remote(
             df_features_id, df_labels_id, feats, slice_key) for slice_key, feats in self.feature_dict.items()]
             )
-        print(f'poll results: {pool_results}')
+        # print(f'poll results: {pool_results}')
 
         top_feature_dict_comp = {r[0]:r[1] for r in pool_results}
 
         top_feature_dict = {slice_key:[] for slice_key in top_feature_dict_comp}
-        print(f'features dict: {top_feature_dict}')
+        # print(f'features dict: {top_feature_dict}')
         top_feature_dict_dis = {slice_key:[] for slice_key in top_feature_dict_comp}
-        print(f'dis features dict: {top_feature_dict_dis}')
+        # print(f'dis features dict: {top_feature_dict_dis}')
         count_large_featurenum_with_small_datasize = 0
         for slice_key, featcomps in top_feature_dict_comp.items():
             for featcomp in featcomps:
@@ -176,9 +176,9 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
             self.set_arm_threshold(flag_th_memory_safe="safest")
         
         self.top_feature_dict = deepcopy(top_feature_dict)
-        print(f'features dict 2: {top_feature_dict}')
+        # print(f'features dict 2: {top_feature_dict}')
         self.top_feature_dict_dis = deepcopy(top_feature_dict_dis)
-        print(f'dis features dict 2: {top_feature_dict}')
+        print(f'dis features dict 2: {top_feature_dict_dis}')
         self.assign_feat_int_dict(self.top_feature_dict, self.top_feature_dict_dis)
 
         if (self.verbose > 0):
@@ -212,15 +212,16 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         self.int_to_feat_dict = deepcopy(int_to_feat_dict)
         self.featdis_to_int_dict = deepcopy(featdis_to_int_dict)
         self.int_to_featdis_dict = deepcopy(int_to_featdis_dict)
-        print(f'feat to int {feat_to_int_dict} \n int to feat: {int_to_feat_dict} \n dis feat to int: {featdis_to_int_dict} \n int to dis feat: {int_to_featdis_dict}')
+        # print(f'feat to int {feat_to_int_dict} \n int to feat: {int_to_feat_dict} \n dis feat to int: {featdis_to_int_dict} \n int to dis feat: {int_to_featdis_dict}')
 
 
     ### Step 2: Assocaition Rule Mining ###
     def arm_behavior_rules(self, df_grp:pd.DataFrame, slice_key:str, min_supp:float=0.5, min_conf:float=0.7):
         def prep_arm(df, top_features):
-            # filter very empty rows (i.e., days)
             # print(f"COLONNES: {df.columns}")
             # print(f"FEATURES: {top_features}")
+    
+            # filter very empty rows (i.e., days)
             df_tmp_ = df[["pid", "date"] + top_features]
             df_tmp = df_tmp_[df_tmp_.isna().sum(axis = 1) <= df_tmp_.shape[1]/2].copy()
             # obtain data points per row (i.e., per day per person)
@@ -237,6 +238,8 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
             return df_tmp[["pid", "date", "dis_value"]]    
 
         # prep int list for arm
+        print(df_grp)
+        print(f'X ram: {df_grp["X_raw"]}')
         data_arm_int = df_grp["X_raw"].apply(lambda x : prep_arm(x, self.top_feature_dict_dis[slice_key]))
         # drop duplicate person day
         data_arm = list(pd.concat(data_arm_int.values, axis = 0).drop_duplicates(["pid", "date"])["dis_value"].values)
@@ -262,6 +265,7 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         return df_arm_output[["X","Y","idx","support","confidence","lift"]]
         
     def arm_grp_contrast_slice(self, df_twogrps: pd.DataFrame, slice_key: str):
+        print(df_twogrps["y_raw"])
         df_grp1 = df_twogrps[df_twogrps["y_raw"]]
         df_grp2 = df_twogrps[~df_twogrps["y_raw"]]
 
