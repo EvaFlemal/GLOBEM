@@ -249,7 +249,7 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
 
         spark = SparkSession.builder.appName("FPGrowthExample")\
             .config("spark.executor.memory", f"{int(self.SYS_MEM_MAX_GB // 4)}G") \
-            .config("spark.driver.memory", f"{int(self.SYS_MEM_MAX_GB // 4)}G") \
+            .config("spark.driver.memory", f"{int(self.SYS_MEM_MAX_GB // 5)}G") \
             .config('spark.driver.maxResultSize', f"{int(self.SYS_MEM_MAX_GB // 5)}G") \
             .getOrCreate()
         df_arm_spark = spark.createDataFrame(
