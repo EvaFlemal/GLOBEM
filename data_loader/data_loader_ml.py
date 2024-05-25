@@ -260,16 +260,16 @@ def data_loader_single(prediction_target:str, institution:str, phase:int, flag_m
     else:
         dataset_file_path = os.path.join(path_definitions.DATA_PATH, "datarepo_max_feature_types", f"{prediction_target}--{ds_key}.pkl")
 
-    if (os.path.exists(dataset_file_path)):
-        with open(dataset_file_path, "rb") as f:
-            dataset = pickle.load(f)
-            print(f"DATASET: {dataset}")
-    else:
-        datapoints = data_loader_single_dataset_label_based(institution, phase, prediction_target, flag_more_feat_types)
-        dataset = DatasetDict(key = ds_key, prediction_target=prediction_target, datapoints=datapoints)
-        Path(os.path.split(dataset_file_path)[0]).mkdir(parents=True, exist_ok=True)
-        with open(dataset_file_path, "wb") as f:
-            pickle.dump(dataset, f)
+    # if (os.path.exists(dataset_file_path)):
+    #     with open(dataset_file_path, "rb") as f:
+    #         dataset = pickle.load(f)
+    #         print(f"DATASET: {dataset}")
+    # else:
+    datapoints = data_loader_single_dataset_label_based(institution, phase, prediction_target, flag_more_feat_types)
+    dataset = DatasetDict(key = ds_key, prediction_target=prediction_target, datapoints=datapoints)
+    Path(os.path.split(dataset_file_path)[0]).mkdir(parents=True, exist_ok=True)
+    with open(dataset_file_path, "wb") as f:
+        pickle.dump(dataset, f)
     return dataset
     # checkpoint
 
