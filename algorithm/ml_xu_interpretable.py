@@ -293,6 +293,13 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         df_arm_merge.columns = ["X", "Y"] + [f"{j}_{i}" for i in ["grp1", "grp2"] for j in ["idx", "supp", "conf", "lift"]]
         df_arm_merge = df_arm_merge.fillna(0)
 
+        del df_arm_grp1
+        del df_arm_grp2
+        gc.collect()
+
+        if (self.verbose>0):
+            print('merging of rule datasets finished')
+
         for coef in ["supp", "conf", "lift"]:
             df_arm_merge[f"{coef}_diff"] = df_arm_merge[f"{coef}_grp1"] - df_arm_merge[f"{coef}_grp2"]
         df_arm_merge["X_sym"] = df_arm_merge["X"].apply(lambda x : [self.int_to_feat_dict[int(i)] for i in x.split(";")])
@@ -300,6 +307,9 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         df_arm_merge["X_sym_dis"] = df_arm_merge["X"].apply(lambda x : [self.int_to_featdis_dict[int(i)] for i in x.split(";")])
         df_arm_merge["Y_sym_dis"] = df_arm_merge["Y"].apply(lambda x : [self.int_to_featdis_dict[int(i)] for i in x.split(";")])
         df_arm_merge["slice"] = slice_key
+
+        if (self.verbose>0):
+            print('metrics calculation finished (supp, conf & lift)')
         
         self.df_arm_merge = deepcopy(df_arm_merge)
         return df_arm_merge
