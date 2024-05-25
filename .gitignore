@@ -38,7 +38,7 @@ tmp_neurips/
 tmp_tmp/
 data_backup_oldpkl/
 
-evaluation_output/*
-!evaluation_output/.gitignore
+# evaluation_output/*
+# !evaluation_output/.gitignore
 
 !figures/*
