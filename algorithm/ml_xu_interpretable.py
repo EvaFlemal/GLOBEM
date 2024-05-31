@@ -248,10 +248,9 @@ class DepressionDetectionAlgorithm_ML_xu_interpretable(DepressionDetectionAlgori
         data_arm = list(pd.concat(data_arm_int.values, axis = 0).drop_duplicates(["pid", "date"])["dis_value"].values)
 
         spark = SparkSession.builder.appName("FPGrowthExample")\
-            .config("spark.executor.memory", "5G") \
-            .config("spark.driver.memory", "5G") \
-            .config('spark.driver.maxResultSize', "7G") \
-            .config('spark.driver.maxResultSize', f"{int(self.SYS_MEM_MAX_GB // 7)}G") \
+            .config("spark.executor.memory", "10G") \
+            .config("spark.driver.memory", "10G") \
+            .config('spark.driver.maxResultSize', "14G") \
             .getOrCreate()
         df_arm_spark = spark.createDataFrame(
             data=[(idx, arm_int_epoch) for idx, arm_int_epoch in enumerate(data_arm) if len(arm_int_epoch) > 1],
