@@ -115,16 +115,18 @@ tf.keras.backend.set_floatx('float64')
 # Define A few commonly used variables
 ################
 
-wks = ["wkdy", "wkend"]
+# wks = ["wkdy", "wkend"]
+day_category = ['weekdays', 'weekends']
+time_category = ['morning', 'afternoon', 'evening', 'night']
 epoch_1 = ["4HR"]
-epochs_4 =  ["morning", "afternoon", "evening", "night"]
-epochs_5 = epochs_4 + ["allday"]
-epochs_6 = epochs_5 + ["14dhist"]
+# epochs_4 =  ["morning", "afternoon", "evening", "night"]
+# epochs_5 = epochs_4 + ["allday"]
+# epochs_6 = epochs_5 + ["14dhist"]
 
-wks_epoch5 = [x + "_" + y for x in wks for y in epochs_5]
-wks_epoch4 = [x + "_" + y for x in wks for y in epochs_4]
-wkdy_epoch4 = ["wkdy_" + y for y in epochs_4]
-wkend_epoch4 = ["wkend_" + y for y in epochs_4]
+wks_epoch8 = [x + "_" + y for x in day_category for y in time_category]
+# wks_epoch4 = [x + "_" + y for x in wks for y in epochs_4]
+# wkdy_epoch4 = ["wkdy_" + y for y in epochs_4]
+# wkend_epoch4 = ["wkend_" + y for y in epochs_4]
 schema_defaults = ['pid', 'epoch', 'weekday', 'grouping', 'epoch_weekday_grouping_abbreviated', 'time']
 
 # feature_types = ['f_blue', 'f_call', 'f_screen', 'f_slp', 'f_steps', 'f_loc', 'f_locMap']
@@ -179,7 +181,7 @@ class feature_columns_repo:
 
 fc_repo = feature_columns_repo()
 
-def set_feature_columns(sep = ":", epochs = epochs_5):
+def set_feature_columns(sep = ":", epochs = wks_epoch8):
     """ Define a series of feature values in fc_repo """
     global fc_repo
 
@@ -279,7 +281,7 @@ def set_feature_columns(sep = ":", epochs = epochs_5):
             else:
                 fc_repo.feature_columns_selected_norm_epoches_types[epoch][ft] = [f + sep + epoch]
 
-set_feature_columns(sep = "#", epochs=epoch_1)
+set_feature_columns(sep = "#", epochs=wks_epoch8)
 
 def globalize(func):
     """Put a function into the global environment so that multiprocessing is easier"""

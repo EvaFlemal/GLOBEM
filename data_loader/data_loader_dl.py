@@ -483,13 +483,14 @@ class dl_feat_preparation():
             all_feats += [f for ft in feature_type_list for f in fc_repo.feature_columns_selected_epoches_types[epoch][ft]]
 
         self.feature_list_nonorm = deepcopy(all_feats)
-        self.feature_list_norm = []
-        for f in all_feats:
+        # self.feature_list_norm = []
+        # for f in all_feats:
             # ft, fn, seg = f.split(":")
-            ft, fn, seg = f.split("#")
+            # ft, fn, seg = f.split("#")
             # new_f = f"{ft}:{fn}_norm:{seg}"
             # self.feature_list_norm.append(new_f)
-        self.feature_list = self.feature_list_nonorm + self.feature_list_norm
+        # self.feature_list = self.feature_list_nonorm + self.feature_list_norm
+        self.feature_list = self.feature_list_nonorm 
 
         if (flag_more_feat_types):
             self.selected_feature_list = self.config["feature_definition"]["feature_list_more_feat_types"]
